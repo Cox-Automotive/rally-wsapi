@@ -22,7 +22,7 @@ class RallyParam {
 
     if (options?.workspace && isString(options?.workspace)) {
       mappedParams.workspace = `/workspace/${options.workspace}`;
-    } else {
+    } else if (this.settings?.workspace) {
       mappedParams.workspace = `/workspace/${this.settings.workspace}`;
     }
 
