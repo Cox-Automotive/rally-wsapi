@@ -1,0 +1,32 @@
+{
+  "name": "rally-wsapi",
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "description": "Rally WSAPI for Node.js",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Cox-Automotive/rally-wsapi.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Rally",
+    "REST",
+    "WSAPI"
+  ],
+  "author": {
+    "name": "Cox Automotive, Inc.",
+    "email": "matt.johnson@coxautoinc.com",
+    "url": "https://github.com/Cox-Automotive/"
+  },
+  "dependencies": {
+    "axios": "^1.7.5",
+    "axios-cookiejar-support": "^5.0.2",
+    "tough-cookie": "^4.1.4"
+  }
+}
