@@ -28,11 +28,6 @@ class RallyParam {
 
     isString(options?.project) && (mappedParams.project = `/project/${options.project}`);
 
-    mappedParams.pagesize = isNumber(options?.pagesize) ? options.pagesize : this.settings.pageSize;
-    mappedParams.itempagesize = isNumber(options?.itempagesize) ? options.itempagesize : this.settings.pageSize;
-    mappedParams.start = isNumber(options?.start) ? options.start : 1;
-    mappedParams.itemstart = isNumber(options?.itemstart) ? options.itemstart : 1;
-
     if (options?.fetch) {
       if (Array.isArray(options.fetch)) {
         mappedParams.fetch = options.fetch.join(",");

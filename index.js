@@ -190,6 +190,7 @@ class RallyClient {
    * @returns 
    */
   async query(options, autoparams) {
+    const localOptions = JSON.parse(JSON.stringify(options));
     this.logger.log(`Query: Init`);
 
     const parseParams = (isBool(autoparams) && autoparams === false) ? false : true;
@@ -204,19 +205,19 @@ class RallyClient {
 
         if (tokenResp !== false) {
           this.logger.log(`Success`);
-          options.key = tokenResp;
+          localOptions.key = tokenResp;
         } else {
           this.logger.log(`Failed`);
         }
       }
 
       this.logger.log(`Query: Parameter check`);
-      if (options?.params && parseParams) {
-        options.params = this.wsapi.util.queryParams(options.params);
+      if (localOptions?.params && parseParams) {
+        localOptions.params = this.wsapi.util.queryParams(localOptions.params);
       }
 
-      this.logger.log(`Query: ${JSON.stringify(options)}`);
-      const resp = await this.wsapi.http.request(options);
+      this.logger.log(`Query: ${JSON.stringify(localOptions)}`);
+      const resp = await this.wsapi.http.request(localOptions);
 
       this.logger.log(`Query: Success ${resp.status}`);
       this.logger.log(`Query: Headers ${JSON.stringify(resp.config?.headers || {})}`);
