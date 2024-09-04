@@ -189,7 +189,7 @@ class RallyClient {
    * @param {*} autoparams 
    * @returns 
    */
-  async query(options, autoparams) {
+  async request(options, autoparams) {
     const localOptions = JSON.parse(JSON.stringify(options));
     this.logger.log(`Query: Init`);
 
