@@ -20,13 +20,17 @@ class RallyParam {
   queryParams(options, asString) {
     const mappedParams = {};
 
-    if (options?.workspace && isString(options?.workspace)) {
-      mappedParams.workspace = `/workspace/${options.workspace}`;
-    } else if (this.settings?.workspace) {
-      mappedParams.workspace = `/workspace/${this.settings.workspace}`;
+    if (this.settings?.workspace) {
+      let segments = this.settings.workspace.split('/');
+      const workspaceID = segments.pop();
+      mappedParams.workspace = `/workspace/${workspaceID}`;
     }
 
-    isString(options?.project) && (mappedParams.project = `/project/${options.project}`);
+    if (options?.project) {
+      let segments = options.project.split('/');
+      const projectID = segments.pop();
+      mappedParams.project = `/project/${projectID}`;
+    }
 
     if (options?.fetch) {
       if (Array.isArray(options.fetch)) {
