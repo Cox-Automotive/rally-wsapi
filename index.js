@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { CookieJar } = require("tough-cookie");
 const { wrapper } = require("axios-cookiejar-support");
-const { isObject, isBool } = require("./src/utils");
+const { isObject, isString, isBool } = require("./src/utils");
 const { where } = require("./src/query");
 const { RallyLog } = require("./src/logs");
 const { RallyParam } = require("./src/param");
@@ -213,7 +213,7 @@ class RallyClient {
 
       this.logger.log(`Query: Ref check`);
       if (localOptions?.ref) {
-        if( isObject(localOptions.ref) && isString(localOptions.ref?._ref) && localOptions.ref._ref.startWith(this.wsapi.baseURL) ) {
+        if( isObject(localOptions.ref) && isString(localOptions.ref?._ref) && localOptions.ref?._ref?.startWith(this.wsapi.baseURL) ) {
           const relativePath = localOptions.ref._ref.replace(this.wsapi.baseURL, '');
           localOptions.url = relativePath;
         }
