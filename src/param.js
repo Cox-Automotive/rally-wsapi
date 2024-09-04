@@ -21,13 +21,13 @@ class RallyParam {
     const mappedParams = {};
 
     if (this.settings?.workspace) {
-      let segments = this.settings.workspace.split('/');
+      const segments = this.settings.workspace.split('/');
       const workspaceID = segments.pop();
       mappedParams.workspace = `/workspace/${workspaceID}`;
     }
 
     if (options?.project) {
-      let segments = options.project.split('/');
+      const segments = options.project.split('/');
       const projectID = segments.pop();
       mappedParams.project = `/project/${projectID}`;
     }
