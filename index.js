@@ -213,7 +213,7 @@ class RallyClient {
 
       this.logger.log(`Query: Ref check`);
       if (localOptions?.ref) {
-        if( isObject(localOptions.ref) && isString(localOptions.ref?._ref) && localOptions.ref?._ref?.startWith(this.wsapi.baseURL) ) {
+        if( isObject(localOptions.ref) && isString(localOptions.ref?._ref) && localOptions.ref?._ref?.startsWith(this.wsapi.baseURL) ) {
           const relativePath = localOptions.ref._ref.replace(this.wsapi.baseURL, '');
           localOptions.url = relativePath;
         }
