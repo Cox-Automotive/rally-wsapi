@@ -1,4 +1,4 @@
-const { isString, isBool, isNumber } = require("./utils");
+const { isString, isBool, isNumber, isObject } = require("./utils");
 
 /**
  * Rally WSAPI for Node.js
@@ -15,6 +15,7 @@ const { isString, isBool, isNumber } = require("./utils");
 class RallyParam {
   constructor(settings) {
     this.settings = settings;
+    this.baseURL = `${settings.server}${settings.serverPath}${settings.apiVersion}`;
   }
 
   queryParams(options, asString) {
@@ -37,6 +38,13 @@ class RallyParam {
         mappedParams.project = `/project/${projectID}`;
       } else if (isNumber(options.project)) {
         mappedParams.project = `/project/${options.project}`;
+      }
+    }
+
+    if (options?.ref) {
+      if( isObject(options.ref) && isString(options.ref?._ref) && options.ref._ref.startWith(this.baseURL) ) {
+        const relativePath = options.ref._ref.replace(this.baseURL, '');
+        mappedParams.url = relativePath;
       }
     }
 
