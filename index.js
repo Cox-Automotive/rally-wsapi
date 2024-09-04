@@ -211,6 +211,15 @@ class RallyClient {
         }
       }
 
+      this.logger.log(`Query: Ref check`);
+      if (localOptions?.ref) {
+        if( isObject(localOptions.ref) && isString(localOptions.ref?._ref) && localOptions.ref._ref.startWith(this.wsapi.baseURL) ) {
+          const relativePath = localOptions.ref._ref.replace(this.wsapi.baseURL, '');
+          localOptions.url = relativePath;
+        }
+        delete localOptions.ref;
+      }
+
       this.logger.log(`Query: Parameter check`);
       if (localOptions?.params && parseParams) {
         localOptions.params = this.wsapi.util.queryParams(localOptions.params);
