@@ -8,7 +8,7 @@ const { isString, isBool, isNumber } = require("./utils");
  * and of the correct type before adding them to the parameters object.
  * This may not be a complete list of all options, but was gathered from
  * available sources.
- * 
+ *
  * Unmapped params are passed along, as-is
  * Reasonable default values are applied if nothing is input
  */
@@ -21,15 +21,23 @@ class RallyParam {
     const mappedParams = {};
 
     if (this.settings?.workspace) {
-      const segments = this.settings.workspace.split('/');
-      const workspaceID = segments.pop();
-      mappedParams.workspace = `/workspace/${workspaceID}`;
+      if (isString(this.settings.workspace)) {
+        const segments = this.settings.workspace.split("/");
+        const workspaceID = segments.pop();
+        mappedParams.workspace = `/workspace/${workspaceID}`;
+      } else if (isNumber(this.settings.workspace)) {
+        mappedParams.workspace = `/workspace/${this.settings.workspace}`;
+      }
     }
 
     if (options?.project) {
-      const segments = options.project.split('/');
-      const projectID = segments.pop();
-      mappedParams.project = `/project/${projectID}`;
+      if (isString(options.project)) {
+        const segments = options.project.split("/");
+        const projectID = segments.pop();
+        mappedParams.project = `/project/${projectID}`;
+      } else if (isNumber(options.project)) {
+        mappedParams.project = `/project/${options.project}`;
+      }
     }
 
     if (options?.fetch) {
