@@ -196,7 +196,7 @@ class RallyClient {
     const parseParams = (isBool(autoparams) && autoparams === false) ? false : true;
     this.logger.log(`Query: AutoParse = ${parseParams}`);
 
-    const respData = {};
+    let respData = {};
 
     try {
       if (this.auth.mode === "basic" && method !== "get") {
@@ -231,8 +231,23 @@ class RallyClient {
       this.logger.log(`Query: Success ${resp.status}`);
       this.logger.log(`Query: Headers ${JSON.stringify(resp.config?.headers || {})}`);
 
-      respData.response = resp.data;
-      respData.error = null;
+      if( Object.keys(resp).length == 1 ) {
+        // Automatically unpack the response
+        const key = Object.keys(resp)[0];
+        const data = resp[key];
+        data['ResponseType'] = key;
+
+        if (data?.Errors && data.Errors.length > 0) {
+          respData.error = data.Errors;
+        } else {
+          respData.error = null;
+        }
+
+        respData.response = data;
+      } else {
+        respData.response = resp;
+        respData.error = null;
+      }
     } catch (error) {
       this.logger.error(`Query: Error ${error.message}`);
       respData.response = null;

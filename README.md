@@ -70,12 +70,12 @@ const config = {
     }
 };
 
-const response = await client.query(config);
+const response = await client.request(config);
 ```
 If you don't want your parameters to be automatically parsed/modified, you can skip this by passing `false` as the second query parameter.  This may require you to set additional parameters such as the workspace to return correct results.
 
 ```
-const response = await client.query(config, false);
+const response = await client.request(config, false);
 ```
 
 A query configuration follows the Request Config pattern exposed by [Axios](https://axios-http.com/docs/req_config).  You can set any custom headers or parameters and the client will minimally process and enrich them to execute your query.
@@ -204,7 +204,7 @@ In the example above, you would get back results 1-200, your next batch would th
 const projects = [];
 
 async function listProjects(inputs) {
-  const data = await client.query({ method: "get", url: "/project", params: inputs });
+  const data = await client.request({ method: "get", url: "/project", params: inputs });
 
   if (data.response) {
     const respObj = data.response.QueryResult;
