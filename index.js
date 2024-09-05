@@ -234,10 +234,8 @@ class RallyClient {
       if( Object.keys(resp.data).length == 1 ) {
         // Automatically unpack the response
         const key = Object.keys(resp.data)[0];
-        console.log(`KEY: ${key}`);
-        const data = resp[key];
-        console.log(`DATA: ${data}`);
-        //data['ResponseType'] = key;
+        const data = resp.data[key];
+        data['ResponseType'] = key;
 
         if (data?.Errors && data.Errors.length > 0) {
           respData.error = data.Errors;
