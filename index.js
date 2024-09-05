@@ -231,9 +231,9 @@ class RallyClient {
       this.logger.log(`Query: Success ${resp.status}`);
       this.logger.log(`Query: Headers ${JSON.stringify(resp.config?.headers || {})}`);
 
-      if( Object.keys(resp).length == 1 ) {
+      if( Object.keys(resp.data).length == 1 ) {
         // Automatically unpack the response
-        const key = Object.keys(resp)[0];
+        const key = Object.keys(resp.data)[0];
         const data = resp[key];
         data['ResponseType'] = key;
 
@@ -245,7 +245,7 @@ class RallyClient {
 
         respData.response = data;
       } else {
-        respData.response = resp;
+        respData.response = resp.data;
         respData.error = null;
       }
     } catch (error) {
