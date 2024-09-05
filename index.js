@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { CookieJar } = require("tough-cookie");
 const { wrapper } = require("axios-cookiejar-support");
-const { isObject, isString, isBool } = require("./src/utils");
+const { isObject, isString, isBool, maskValue } = require("./src/utils");
 const { where } = require("./src/query");
 const { RallyLog } = require("./src/logs");
 const { RallyParam } = require("./src/param");
@@ -54,13 +54,19 @@ class RallyClient {
     const debugEnvs = process.env.DEBUG?.toLowerCase() === "true" || false;
     const debugConf = config?.debug === true || false;
 
+    const configtest = JSON.parse(JSON.stringify(config));
+    configtest.auth.key = maskValue(configtest.auth.key);
+    configtest.auth.user = maskValue(configtest.auth.user);
+    configtest.auth.pass = maskValue(configtest.auth.pass);
+
     if (debugEnvs || debugConf) {
       this.settings.debug = true;
       process.env.DEBUG = true;
     }
 
     this.logger = new RallyLog();
-    this.logger.log(`Config: ${JSON.stringify(config)}`);
+    this.logger.log(`Config: ${JSON.stringify(configtest)}`);
+
     this.configureSettingsOverrides(config);
   }
 
