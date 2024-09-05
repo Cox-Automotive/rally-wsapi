@@ -78,7 +78,7 @@ If you don't want your parameters to be automatically parsed/modified, you can s
 const response = await client.request(config, false);
 ```
 
-A query configuration follows the Request Config pattern exposed by [Axios](https://axios-http.com/docs/req_config).  You can set any custom headers or parameters and the client will minimally process and enrich them to execute your query.
+A query configuration follows the [Request Config](https://axios-http.com/docs/req_config) pattern exposed by Axios.  You can set any custom headers or parameters and the client will minimally process and enrich them to execute your query.
 
 The client will automatically handle the following options for you:
 - Base URL (https://rally1.rallydev.com/slm/webservice/v2.0)
@@ -94,6 +94,84 @@ The client will automatically handle the following options for you:
     - Automatic conversion from Array to Comma-Delimited String
 
 You can override all of these default values by passing your own data through the client or query configs.
+
+### Core Options
+
+- `method`
+  - The method must be set on each request and will not be added automatically
+  - GET, POST, PUT, DELETE are valid values
+
+- `url`
+  - Follow the Rally WSAPI documentation to locate the correct relative URL
+  - Example: `/project`
+  - Example: `/hierarchicalrequirement/create`
+
+- `ref`
+  - You may pass in a ref object which contains a `_ref` field
+  - The relative path will be extracted and set as the `url` on the request
+
+**Ref Example:**
+```
+ Defects: {
+         _rallyAPIMajor: "2",
+         _rallyAPIMinor: "0",
+         _ref: "https://rally1.rallydev.com/slm/webservice/v2.0/HierarchicalRequirement/12345/defects",
+         _type: "Defects"
+ },
+```
+In this case the base URL will be removed returning a relative URL: `/hierarchicalrequirement/12345/defects`
+
+Additional options for an Axios Request configuration can be [found here](https://axios-http.com/docs/req_config).
+
+### Query Parameters
+
+Queries may use the following parameters which are set in the `params: {}` object of the request.
+
+- `query`
+    - The query string is query=(FormattedID%20%3D%20S40330) in the example below.
+    - Example: https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?query=(FormattedID%20%3D%20S40330)
+
+- `order`
+    - A sort string which determines the order of the data returned. desc will present the data in descending order.
+    - Example: order=Name desc
+
+- `pagesize`
+    -   Number of results to display on the page. Must be greater than 0 and less than or equal to 200 for 1.x API calls or 2000 for 2.x API calls. The default is 20.
+    -   Example: pagesize=30
+
+- `start`
+    -   The start index for queries, which begins at 1. The default is 1.
+    -   Example: start=1
+
+- `fetch`
+    -   A string value which determines the attributes present on the objects returned.
+    -   Example: fetch=FormattedID,Name,Project,Parent
+
+- `workspace`
+    -   This parameter limits the search space to a specific workspace. If not specified, then the query will search the userʼs default workspace. When used, the workspace parameter is set to the URL of the workspace to be searched as shown in the example below. ‹Workspace ObjectID› should be set to the Object ID of the workspace.
+    - `workspace: 123456789`
+    - Example: workspace=/workspace/123456789
+
+- `project`
+    -   This parameter limits the search space to a specific project. If not specified, then the query will run in the userʼs default project. The workspace parameter is not necessary when project is specified because the workspace will be inherited from the project. When used, the project parameter is set to the URL of the project to be searched as shown in the example below. ‹Project ObjectID› should be set to the Object ID of the project.
+    - `project: 123456789`
+    - Example: project=/project/123456789
+
+- `projectScopeUp`
+    - Include parent projects above the one specified. Default is true.
+    - Example: projectScopeUp=false
+
+- `projectScopeDown`
+    - Include child projects below the specified one. Default is true.
+    - Example: projectScopeDown=true
+
+### PUT/POST Parameters
+
+The following parameters only have an effect for PUT and POST requests.
+-   `rankAbove`, `rankBelow`
+    - Set the value to an object reference url to cause the created/modified object to be ranked in relation to the referenced object.
+    - Example: rankAbove=/slm/webservice/v2.0/defect/<Defect ObjectID>
+    - Example: rankBelow=/slm/webservice/v2.0/defect/<Defect ObjectID>
 
 ### Rally Syntax Query Builder
 
@@ -120,72 +198,22 @@ const config = {
 
 ```
 
-### Query Parameters
-
-Query URLs may use the following parameters.
-
-- `query`
-    - The query string is query=(FormattedID%20%3D%20S40330) in the example below.
-    - Example: https://rally1.rallydev.com/slm/webservice/v2.0/hierarchicalrequirement?query=(FormattedID%20%3D%20S40330)
-
-- `order`
-    - A sort string which determines the order of the data returned. desc will present the data in descending order.
-    - Example: order=Name desc
-
-- `pagesize`
-    -   Number of results to display on the page. Must be greater than 0 and less than or equal to 200 for 1.x API calls or 2000 for 2.x API calls. The default is 20.
-    -   Example: pagesize=30
-
-- `start`
-    -   The start index for queries, which begins at 1. The default is 1.
-    -   Example: start=1
-
-- `fetch`
-    -   A string value which determines the attributes present on the objects returned.
-    -   Example: fetch=FormattedID,Name,Project,Parent
-
-- `workspace`
-    -   This parameter limits the search space to a specific workspace. If not specified, then the query will search the userʼs default workspace. When used, the workspace parameter is set to the URL of the workspace to be searched as shown in the example below. ‹Workspace ObjectID› should be set to the Object ID of the workspace.
-    -   Example: workspace=https://rally1.rallydev.com/slm/webservice/v2.0/workspace/‹Workspace ObjectID›
-
-- `project`
-    -   This parameter limits the search space to a specific project. If not specified, then the query will run in the userʼs default project. The workspace parameter is not necessary when project is specified because the workspace will be inherited from the project. When used, the project parameter is set to the URL of the project to be searched as shown in the example below. ‹Project ObjectID› should be set to the Object ID of the project.
-    - Example: project=https://rally1.rallydev.com/slm/webservice/v2.0/project/‹Project ObjectID›
-
-- `projectScopeUp`
-    - Include parent projects above the one specified. Default is true.
-    - Example: projectScopeUp=false
-
-- `projectScopeDown`
-    - Include child projects below the specified one. Default is true.
-    - Example: projectScopeDown=true
-
-### PUT/POST Parameters
-
-The following parameters only have an effect for PUT and POST requests.
--   `rankAbove`, `rankBelow`
-    - Set the value to an object reference url to cause the created/modified object to be ranked in relation to the referenced object.
-    - Example: rankAbove=/slm/webservice/v2.0/defect/<Defect ObjectID>
-    - Example: rankBelow=/slm/webservice/v2.0/defect/<Defect ObjectID>
-
-
 ## Query Response
 
-Data returned by Axios is wrapped in an object to provide the complete response or error contents.  The end user is responsible for extracting and using this data.
+The WSAPI typically returns an object with a single key such as 'QueryResult', which can be cumbersome to work with.  Similar to the legacy rally client, this client will look for responses with a single key and unpack them automatically for easier access.  So the context isn't lost, the original key is saved in the value 'ResponseType'.  A unified object is then returned containing the response and any errors.  If an error array is found on the Rally result, it is copied to the error field, this is to aid in quickly checking whether a response was successful or not.
 
 ```
 {
   response: {
-    QueryResult: {
-      _rallyAPIMajor: '2',
-      _rallyAPIMinor: '0',
-      Errors: [],
-      Warnings: [],
-      TotalResultCount: 662,
-      StartIndex: 1,
-      PageSize: 200,
-      Results: [Array]
-    }
+    _rallyAPIMajor: '2',
+    _rallyAPIMinor: '0',
+    Errors: [],
+    Warnings: [],
+    TotalResultCount: 662,
+    StartIndex: 1,
+    PageSize: 200,
+    Results: [Array],
+    ResponseType: 'QueryResult'
   },
   error: null
 }

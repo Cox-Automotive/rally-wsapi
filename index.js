@@ -95,6 +95,14 @@ class RallyClient {
           delete config.auth;
         }
       }
+
+      if (this.settings.startIndex < 1) {
+        this.settings.startIndex = 1;
+      }
+
+      if (this.settings.pageSize < 1) {
+        this.settings.pageSize = 20;
+      }
     }
 
     this.wsapi.baseURL = `${this.settings.server}${this.settings.serverPath}${this.settings.apiVersion}`;

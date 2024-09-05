@@ -41,11 +41,12 @@ class RallyParam {
       }
     }
 
-    if (options?.ref) {
-      if( isObject(options.ref) && isString(options.ref?._ref) && options.ref._ref.startWith(this.baseURL) ) {
-        const relativePath = options.ref._ref.replace(this.baseURL, '');
-        mappedParams.url = relativePath;
-      }
+    if (typeof options.start === "undefined") {
+      mappedParams.start = this.settings.startIndex;
+    }
+
+    if (typeof options.pagesize === "undefined") {
+      mappedParams.pagesize = this.settings.pageSize;
     }
 
     if (options?.fetch) {
