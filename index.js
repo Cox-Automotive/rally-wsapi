@@ -66,6 +66,7 @@ class RallyClient {
 
     this.logger = new RallyLog();
     this.logger.log(`Config: ${JSON.stringify(configtest)}`);
+    configtest = null;
 
     this.configureSettingsOverrides(config);
   }
