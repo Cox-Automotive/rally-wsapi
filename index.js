@@ -54,7 +54,7 @@ class RallyClient {
     const debugEnvs = process.env.DEBUG?.toLowerCase() === "true" || false;
     const debugConf = config?.debug === true || false;
 
-    const configtest = JSON.parse(JSON.stringify(config));
+    let configtest = JSON.parse(JSON.stringify(config));
     configtest.auth.key = maskValue(configtest.auth.key);
     configtest.auth.user = maskValue(configtest.auth.user);
     configtest.auth.pass = maskValue(configtest.auth.pass);
