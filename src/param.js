@@ -31,6 +31,16 @@ class RallyParam {
       }
     }
 
+    if (options?.workspace) {
+      if (isString(options.workspace)) {
+        const segments = options.workspace.split("/");
+        const workspaceID = segments.pop();
+        mappedParams.workspace = `/workspace/${workspaceID}`;
+      } else if (isNumber(options.workspace)) {
+        mappedParams.workspace = `/workspace/${options.workspace}`;
+      }
+    }
+
     if (options?.project) {
       if (isString(options.project)) {
         const segments = options.project.split("/");
